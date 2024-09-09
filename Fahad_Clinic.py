@@ -1,10 +1,17 @@
 import openai
 import streamlit as st
-import toml
 
-config = toml.load("configure.toml")
-openai.api_key = config["settings"]["api_key"]
-st.title("🩺 AI_Clinic")
+# Sidebar for API Key Input
+st.sidebar.header("Settings")
+api_key = st.sidebar.text_input("OpenAI API Key", type="password")
+
+# Check if API key is set
+if api_key:
+    openai.api_key = api_key
+else:
+    st.sidebar.warning("Please enter your OpenAI API key.")
+
+st.title("🩺 AI Clinic")
 st.caption("👨‍⚕️&👩‍⚕️ Set the Appointments with Expert Doctors")
 
 # Initialize messages in session state
@@ -20,8 +27,8 @@ for msg in st.session_state.messages:
 
 # Handle user input
 if prompt := st.chat_input():
-    if not openai.api_key:
-        st.info("OpenAI API key is not set.")
+    if not api_key:
+        st.info("Please enter your OpenAI API key in the sidebar.")
         st.stop()
 
     client = openai
