@@ -1,10 +1,9 @@
 import openai
 import streamlit as st
-import os
+import toml
 
-# Get OpenAI API key from environment variable
-openai.api_key = os.getenv("Api_key")
-
+config = toml.load("config.toml")
+openai.api_key = config["settings"]["api_key"]
 st.title("🩺 AI_Clinic")
 st.caption("👨‍⚕️&👩‍⚕️ Set the Appointments with Expert Doctors")
 
