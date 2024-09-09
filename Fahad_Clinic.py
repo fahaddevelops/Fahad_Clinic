@@ -2,7 +2,7 @@ import openai
 import streamlit as st
 import toml
 
-config = toml.load("config.toml")
+config = toml.load("configure.toml")
 openai.api_key = config["settings"]["api_key"]
 st.title("🩺 AI_Clinic")
 st.caption("👨‍⚕️&👩‍⚕️ Set the Appointments with Expert Doctors")
