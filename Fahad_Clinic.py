@@ -1,18 +1,14 @@
 import openai
 import streamlit as st
 
-# Sidebar for API Key Input
-st.sidebar.header("Settings")
-api_key = st.sidebar.text_input("OpenAI API Key", type="password")
+# Load API key from Streamlit Secrets or environment variable
+api_key = st.secrets["openai_api_key"]  # Ensure you have set this in your Streamlit Secrets
 
-# Check if API key is set
-if api_key:
-    openai.api_key = api_key
-else:
-    st.sidebar.warning("Please enter your OpenAI API key.")
+# Set the OpenAI API key
+openai.api_key = api_key
 
 st.title("🩺 AI Clinic")
-st.caption("👨‍⚕️&👩‍⚕️ Set the Appointments with Expert Doctors")
+st.caption("👨‍⚕️&👩‍⚕️ Set Appointments with Expert Doctors")
 
 # Initialize messages in session state
 if "messages" not in st.session_state:
@@ -27,17 +23,14 @@ for msg in st.session_state.messages:
 
 # Handle user input
 if prompt := st.chat_input():
-    if not api_key:
-        st.info("Please enter your OpenAI API key in the sidebar.")
-        st.stop()
-
-    client = openai
+    # Append user input to the message history
     st.session_state.messages.append({"role": "user", "content": prompt})
     st.chat_message("user").write(prompt)
 
     # Get response from OpenAI
-    response = client.ChatCompletion.create(model="gpt-3.5-turbo", messages=st.session_state.messages)
+    response = openai.ChatCompletion.create(model="gpt-3.5-turbo", messages=st.session_state.messages)
     msg = response.choices[0].message.content
 
+    # Append assistant's response to the message history
     st.session_state.messages.append({"role": "assistant", "content": msg})
     st.chat_message("assistant").write(msg)
