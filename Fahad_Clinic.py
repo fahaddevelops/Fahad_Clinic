@@ -6,6 +6,11 @@ api_key = st.secrets["openai_api_key"]  # Ensure you have set this in your Strea
 
 # Set the OpenAI API key
 openai.api_key = api_key
+# Use the API key in the OpenAI request
+response = openai.ChatCompletion.create(
+    model="gpt-3.5-turbo",
+    messages=st.session_state.messages
+)
 
 st.title("🩺 AI Clinic")
 st.caption("👨‍⚕️&👩‍⚕️ Set Appointments with Expert Doctors")
